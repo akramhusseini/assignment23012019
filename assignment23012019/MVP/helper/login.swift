@@ -19,7 +19,7 @@ open class loginManager {
      - Parameter: username, password
      - Returns: via completion handler, will return the token
      */
-    static func login(username: String,password: String,completion: @escaping (String?) -> Void ) {
+    static func login(username: String ,password: String,completion: @escaping (String?) -> Void ) {
         Utility.getURLAndMethod(Rel: token) { (url, method) in
             if
                 let url = url, let method = method,

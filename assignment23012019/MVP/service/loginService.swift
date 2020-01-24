@@ -19,8 +19,9 @@ class loginService {
         
      }
 
-    func loginAndGetToken(completion: @escaping (String?) -> Void ) {
-        loginManager.login(username: "testak@mailinator.com", password: "terokkar") { (token) in
+    func loginAndGetToken(username: String, password: String, completion: @escaping (String?) -> Void ) {
+//        loginManager.login(username: "testak@mailinator.com", password: "terokkar") { (token) in
+            loginManager.login(username: username , password: password) { (token) in
             if let token = token {
                 completion(token)
                 

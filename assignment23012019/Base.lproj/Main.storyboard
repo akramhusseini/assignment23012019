@@ -65,6 +65,8 @@
                     <navigationItem key="navigationItem" id="jNA-WP-fU4"/>
                     <connections>
                         <outlet property="loginWithTouchiDBtn" destination="PwX-uQ-2xH" id="rOU-d1-GTg"/>
+                        <outlet property="password" destination="qgs-sA-lUB" id="NpL-Hc-icR"/>
+                        <outlet property="userName" destination="1Vg-Nq-fcZ" id="15X-Hv-vqO"/>
                         <segue destination="u5T-GW-cmb" kind="show" id="dQ7-61-erR"/>
                     </connections>
                 </viewController>

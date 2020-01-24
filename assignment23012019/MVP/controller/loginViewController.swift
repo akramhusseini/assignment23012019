@@ -16,6 +16,10 @@ class loginViewController: UIViewController {
     
     @IBOutlet weak var loginWithTouchiDBtn: UIButton!
     
+    @IBOutlet weak var userName: UITextField!
+    
+    @IBOutlet weak var password: UITextField!
+    
     let presenter = loginPresenterView(loginService())
     
     override func viewDidLoad() {
@@ -41,7 +45,8 @@ class loginViewController: UIViewController {
     }
     
     @IBAction func login(_ sender: Any) {
-        presenter.login()
+        
+        presenter.login(username: userName, password: password)
         
     }
     

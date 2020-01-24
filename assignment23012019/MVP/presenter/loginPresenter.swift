@@ -38,9 +38,14 @@ class loginPresenterView  {
      - Parameter: none
      - Returns: none
      */
-    func login() {
+    func login(username: UITextField?, password: UITextField?) {
+        if  let username = username?.text,
+            let password = password?.text,
+            validateUserName(username: username),
+            validatePassword(password: password){
+            
         view?.displayLoader()
-        service.loginAndGetToken { (token) in
+        service.loginAndGetToken(username: username, password: password) { (token) in
             if let token = token {
                 print(token)
                 //                self.view?.removeLoader()
@@ -59,7 +64,40 @@ class loginPresenterView  {
                 self.view?.removeLoader()
             }
         }
+        } else {
+            // invalid user name or password
+        }
     }
+    
+    
+    
+    func validateUserName(username: String)-> Bool {
+        if username.isEmpty || !username.isValidEmail() {
+            let ac = UIAlertController(title: "invalid email", message: "Sorry!", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            self.view?.present(ac, animated: true)
+              return false
+              } else {
+                  return true
+              }
+    }
+    
+    func validatePassword(password: String)-> Bool {
+        if password.isEmpty {
+           
+            
+            let ac = UIAlertController(title: "password is empty", message: "Sorry!", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            self.view?.present(ac, animated: true)
+             return false
+            
+        } else {
+            return true
+        }
+      
+    }
+    
+    
     
     /**
      get Search AutoComplete Products and saves in array
@@ -172,6 +210,9 @@ class loginPresenterView  {
      */
     func loginFailed() {
         print("login failed")
+        let ac = UIAlertController(title: "Login failed: invalid email or password ", message: "Sorry!", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.view?.present(ac, animated: true)
     }
     
     
