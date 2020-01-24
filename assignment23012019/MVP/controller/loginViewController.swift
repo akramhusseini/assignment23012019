@@ -12,8 +12,6 @@ import Alamofire
 class loginViewController: UIViewController {
     
     
-    
-    
     @IBOutlet weak var loginWithTouchiDBtn: UIButton!
     
     @IBOutlet weak var userName: UITextField!
@@ -27,7 +25,7 @@ class loginViewController: UIViewController {
         
         presenter.attachView(self)
         
-      
+       
             
             
         }
@@ -92,4 +90,5 @@ extension loginViewController {
         self.removeSpinner()
     }
 }
+
 

@@ -31,7 +31,7 @@ class searchViewController: UIViewController, UITextFieldDelegate {
 //        }
         searchButton.imageView?.contentMode = .scaleAspectFit
         tableView.rowHeight = 150
-        
+        search.delegate = self
   
      
     }
@@ -150,4 +150,11 @@ extension searchViewController : searchView {
     
 }
     
+// MARK: - extension to resign keyboard
 
+extension searchViewController : UITextViewDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+}

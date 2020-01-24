@@ -157,7 +157,7 @@ class searchPresenterView  {
                    return
                }
         
-        view?.displayLoader()
+//        view?.displayLoader()
         service.getNextPage(pageURL: nextPageUrl, method: "GET", token: token) { (products, summary) in
             self.nextPageLink = nil
             if let products = products,
@@ -183,7 +183,7 @@ class searchPresenterView  {
                 self.view?.reloadProductTableView(hasData: hasData)
             }
             
-            self.view?.removeLoader()
+//            self.view?.removeLoader()
             
         }
         
