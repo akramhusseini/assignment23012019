@@ -138,6 +138,7 @@ class loginPresenterView  {
         view?.removeLoader()
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let searchVC = mainStoryboard.instantiateViewController(withIdentifier: "searchViewController") as! searchViewController
+        searchVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         self.view?.navigationController?.pushViewController(searchVC, animated: true)
 //        self.view?.loginSuccess()
     }
