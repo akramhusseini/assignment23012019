@@ -32,7 +32,7 @@ class searchViewController: UIViewController, UITextFieldDelegate {
         searchButton.imageView?.contentMode = .scaleAspectFit
         tableView.rowHeight = 150
         
-        search.attachView(self)
+  
      
     }
     
@@ -42,14 +42,12 @@ class searchViewController: UIViewController, UITextFieldDelegate {
             presenter.attachView(self)
         }
         
-        if !search.isViewAttached() {
-            search.attachView(self)
-        }
+     
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         presenter.detachView()
-        search.detachView()
+       
     }
     
     
@@ -131,12 +129,5 @@ extension searchViewController : searchView {
        }
     
 }
+    
 
-// MARK: - startSearch extension for the customSearchField, to call back when a selection is done and start searching
-extension searchViewController : startSearch {
-    func startSearching() {
-        performSearch()
-    }
-    
-    
-}

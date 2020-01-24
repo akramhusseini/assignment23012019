@@ -12,13 +12,9 @@ import RealmSwift
 
 import UIKit
 
-protocol startSearch {
-    func startSearching()
-}
-
 class CustomSearchTextField: UITextField{
     
-   private var view : startSearch?
+ 
     var resultsList : [autoCompleteTable] = []
     var tableView: UITableView?
     
@@ -112,12 +108,14 @@ extension CustomSearchTextField: UITableViewDelegate, UITableViewDataSource {
             tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CustomSearchTextFieldCell")
             tableView.delegate = self
             tableView.dataSource = self
+            tableView.separatorColor = UIColor.clear
             self.window?.addSubview(tableView)
 
         } else {
 //            addData()
             print("tableView created")
             tableView = UITableView(frame: CGRect.zero)
+            
         }
         
         updateSearchTableView()
@@ -150,7 +148,7 @@ extension CustomSearchTextField: UITableViewDelegate, UITableViewDataSource {
             tableView.separatorInset = UIEdgeInsets.zero
             tableView.layer.cornerRadius = 5.0
             tableView.separatorColor = UIColor.lightGray
-            tableView.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+            tableView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
             
             if self.isFirstResponder {
                 superview?.bringSubviewToFront(self)
@@ -180,6 +178,7 @@ extension CustomSearchTextField: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomSearchTextFieldCell", for: indexPath) as UITableViewCell
         cell.backgroundColor = UIColor.clear
         cell.textLabel?.text = resultsList[indexPath.row].name
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
     
@@ -188,42 +187,10 @@ extension CustomSearchTextField: UITableViewDelegate, UITableViewDataSource {
         self.text = resultsList[indexPath.row].name
         tableView.isHidden = true
         self.endEditing(true)
-        view?.startSearching()
+     
     }
     
-    /**
-        check if View is not attached to controller
-        - Parameter none
-        - Returns: none
-        */
-       
-       func isViewAttached()->Bool {
-           if view == nil {
-               return false
-           } else {
-               return true
-           }
-       }
-       
-       
-       /**
-        attach this custom class to controller
-        - Parameter none
-        - Returns: none
-        */
-       func attachView(_ view: startSearch) {
-           self.view = view
-       }
-       
-       
-       /**
-        detach custom class from controller
-        - Parameter none
-        - Returns: none
-        */
-       func detachView() {
-           self.view = nil
-       }
+
        
     
 }
