@@ -31,6 +31,7 @@
 		CB34F01923D9FBEA000955D4 /* productTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34F01823D9FBEA000955D4 /* productTableViewCell.swift */; };
 		CB75CF2223DAD9C200D220C7 /* autoCompleteTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB75CF2123DAD9C200D220C7 /* autoCompleteTable.swift */; };
 		CB75CF2423DAF9D500D220C7 /* emailValidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB75CF2323DAF9D500D220C7 /* emailValidate.swift */; };
+		CB75CF2623DB1B3200D220C7 /* safeArrayAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB75CF2523DB1B3200D220C7 /* safeArrayAccess.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		CB34F01823D9FBEA000955D4 /* productTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = productTableViewCell.swift; sourceTree = "<group>"; };
 		CB75CF2123DAD9C200D220C7 /* autoCompleteTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = autoCompleteTable.swift; sourceTree = "<group>"; };
 		CB75CF2323DAF9D500D220C7 /* emailValidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = emailValidate.swift; sourceTree = "<group>"; };
+		CB75CF2523DB1B3200D220C7 /* safeArrayAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = safeArrayAccess.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				CB34EFFB23D986EA000955D4 /* URLHelper.swift */,
+				CB75CF2523DB1B3200D220C7 /* safeArrayAccess.swift */,
 				CB75CF2323DAF9D500D220C7 /* emailValidate.swift */,
 				CB34F00B23D9E29D000955D4 /* customFilter.swift */,
 				CB34F01123D9EE6F000955D4 /* imageTools.swift */,
@@ -330,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB75CF2423DAF9D500D220C7 /* emailValidate.swift in Sources */,
+				CB75CF2623DB1B3200D220C7 /* safeArrayAccess.swift in Sources */,
 				CB34F00023D9BC5F000955D4 /* searchViewController.swift in Sources */,
 				CB34EFFC23D986EA000955D4 /* URLHelper.swift in Sources */,
 				CB34EFFE23D9AB26000955D4 /* login.swift in Sources */,

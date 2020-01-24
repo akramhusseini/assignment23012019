@@ -31,6 +31,10 @@ class searchPresenterView  {
     private let service: searchService
     weak private var view : searchView?
     
+    var totalLines : Int?
+    var pageLinks : [String] = []
+    
+    
     private var products : [product] = []
     
     init(_ service: searchService) {
@@ -38,25 +42,51 @@ class searchPresenterView  {
     }
     
     
+    
+    
     /**
-       get Search AutoComplete Products and saves in array
-       - Parameter: none
-       - Returns: none
-       */
+     get Search AutoComplete Products and saves in array
+     - Parameter: none
+     - Returns: none
+     */
     func SearchProducts(searchTerm: String) {
         
-        // first lets get token from key chain
+        page = 1
+        nextPageLink = nil
+        lastPageLoaded = nil
         
+        // get token from key chain
         guard let token = KeychainWrapper.standard.string(forKey: "token") else {
             // failed to get token, lets exit
             print("error, there is no token stored")
             return
         }
         view?.displayLoader()
-        service.searchProducts(searchTerm: searchTerm, token: token) { (products) in
-            if let products = products {
+        service.searchProducts(searchTerm: searchTerm, token: token) { (products, summary) in
+            if let products = products,
+                let summary = summary,
+                let TotalCountOfLines = summary["TotalCountOfLines"] as? Int,
+                let links = summary["_links"] as? [[String:Any]]
+//                ,let totalPages = summary["TotalCountOfPages"] as? Int
+            {
+                print(TotalCountOfLines)
+                self.totalLines = TotalCountOfLines
                 self.products = products
                 let hasData = self.products.count > 0
+                
+                self.nextPageLink = nil
+                for linkItem in links {
+                    if let Rel = linkItem["Rel"] as? String,
+                        Rel == "Next",
+                        let link = linkItem["Href"] as? String {
+                        self.nextPageLink = link
+                        break
+                    }
+                }
+                
+              
+                
+                
                 self.view?.reloadProductTableView(hasData: hasData)
                 
             } else {
@@ -69,6 +99,94 @@ class searchPresenterView  {
             self.view?.removeLoader()
            print("display search results!")
         }
+    }
+    
+   
+    var nextPageLink : String?
+    var lastPageLoaded : String?
+    
+    /**
+     checks if a next page was found in the last API call
+     - Parameter: none
+     - Returns: none
+     */
+    func isThereANextPageToLoad() -> Bool {
+        if nextPageLink != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
+    var page = 1
+    /**
+     loads next page if available
+     - Parameter: none
+     - Returns: none
+     */
+    func loadAdditionalPage() {
+        
+        
+        
+        
+        
+        
+        // get next page URL if available, else exit
+        guard let nextPageUrl = nextPageLink else { return }
+        
+        // check for any multithread issues
+        
+        if let lastPageLoaded = lastPageLoaded,
+            nextPageUrl == lastPageLoaded {
+            // this is a double page load, lets exit
+            return
+        } else {
+            lastPageLoaded = nextPageUrl
+            page = page + 1
+            print("load next page : \(page)")
+        }
+           
+        
+        
+        
+        // get token from key chain, else exit
+               guard let token = KeychainWrapper.standard.string(forKey: "token") else {
+                   // failed to get token, lets exit
+                   print("error, there is no token stored")
+                   return
+               }
+        
+        view?.displayLoader()
+        service.getNextPage(pageURL: nextPageUrl, method: "GET", token: token) { (products, summary) in
+            self.nextPageLink = nil
+            if let products = products,
+            let summary = summary,
+            let links = summary["_links"] as? [[String:Any]] {
+                for product in products {
+                    self.products.append(product)
+                }
+                let hasData = self.products.count > 0
+                self.nextPageLink = nil
+                for linkItem in links {
+                    if let Rel = linkItem["Rel"] as? String,
+                        Rel == "Next",
+                        let link = linkItem["Href"] as? String {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250), execute: {
+                            // Put your code which should be executed with a delay here
+                            self.nextPageLink = link
+                        })
+                        
+                        break
+                    }
+                }
+                self.view?.reloadProductTableView(hasData: hasData)
+            }
+            
+            self.view?.removeLoader()
+            
+        }
+        
     }
     
     

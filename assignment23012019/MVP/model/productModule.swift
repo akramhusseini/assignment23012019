@@ -17,7 +17,7 @@ class product {
     
     init(jsonData: [String:Any]) {
         
-        print("jsdonData: \(jsonData)")
+//        print("jsdonData: \(jsonData)")
         
         if let name = jsonData["Name"] as? String {
             self.name = name

@@ -19,35 +19,71 @@ class searchService {
 
  
     
-    func searchProducts(searchTerm: String, token: String, completion: @escaping ([product]?) -> Void) {
+    func searchProducts( searchTerm: String, token: String, completion: @escaping ([product]?, [String:Any]?) -> Void) {
         Utility.getURLAndMethod(Rel: ProductsSearch) { (url, method) in
             if let url = url, let method = method,
                 let httpMethod = method.httpMethodFromString(),
-                let urlWithAddedSearchTerm = url.replacingOccurrences(of: "~SearchTerm", with:searchTerm).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
-                
+                let urlWithAddedSearchTerm = url.replacingOccurrences(of: "~SearchTerm", with:searchTerm).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                {
+
                 let header = ["Accept" : "application/json",
                               "Authorization" : "Bearer \(token)"]
-                
-                
+
+
                 Alamofire.request(urlWithAddedSearchTerm, method: httpMethod,parameters: nil, headers: header).validate().responseJSON { response in
                     if let dict = response.result.value as? [String:Any],
-                        let productListDict = dict["Products"] as? [[String:Any]] {
-                        
+                        let productListDict = dict["Products"] as? [[String:Any]],
+                        let summary = dict["Summary"] as? [String:Any]
+                     {
+
+
+
                         //                                    completion(strings)
                         let productList = productListDict.compactMap { dic in return product(jsonData: dic) }
-                        completion(productList)
+                        completion(productList, summary)
                         //                                   print(dict)
                     } else {
                         print("no products found")
-                        completion(nil)
+                        completion(nil, nil)
                     }
+
+                }
+
+            }
+
+        }
+    }
+    
+    func getNextPage(pageURL: String,method: String, token: String, completion: @escaping ([product]?, [String:Any]?) -> Void) {
+        
+        if
+            let httpMethod = method.httpMethodFromString()
+            
+        {
+            let header = ["Accept" : "application/json",
+                          "Authorization" : "Bearer \(token)"]
+            
+            Alamofire.request(pageURL, method: httpMethod,parameters: nil, headers: header).validate().responseJSON { response in
+                if let dict = response.result.value as? [String:Any],
+                    let productListDict = dict["Products"] as? [[String:Any]],
+                let summary = dict["Summary"] as? [String:Any]{
                     
+                    //                                    completion(strings)
+                    let productList = productListDict.compactMap { dic in return product(jsonData: dic) }
+                    completion(productList, summary)
+                    //                                   print(dict)
+                } else {
+                    print("no products found")
+                    completion(nil, nil)
                 }
                 
             }
             
         }
+        
+        
     }
+    
     
 }
 

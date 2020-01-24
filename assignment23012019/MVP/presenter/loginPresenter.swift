@@ -47,12 +47,12 @@ class loginPresenterView  {
         view?.displayLoader()
         service.loginAndGetToken(username: username, password: password) { (token) in
             if let token = token {
-                print(token)
+//                print(token)
                 //                self.view?.removeLoader()
                 
                 let saveSuccessful: Bool = KeychainWrapper.standard.set(token, forKey: "token")
                 if saveSuccessful{
-                    print("token saved success")
+//                    print("token saved success")
                 }
                 
                 self.getSearchAutoCompleteProducts()
@@ -110,7 +110,7 @@ class loginPresenterView  {
         
         guard let token = checkToken() else {
             // failed to get token, lets exit
-            print("error, there is no token stored")
+//            print("error, there is no token stored")
             return
         }
         //        view?.displayLoader()
@@ -118,7 +118,7 @@ class loginPresenterView  {
             DispatchQueue.main.async {
                 self.view?.removeLoader()
             }
-            print(completed)
+//            print(completed)
             
 //            if let names = names {
 //                autoCompleteArray = names
@@ -161,7 +161,7 @@ class loginPresenterView  {
         
         guard let token = checkToken() else {
             // failed to get token, lets exit
-            print("error, there is no token stored")
+//            print("error, there is no token stored")
             let ac = UIAlertController(title: "Login first, token not recognized!", message: "Sorry!", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             self.view?.present(ac, animated: true)
@@ -181,7 +181,7 @@ class loginPresenterView  {
                 
                 DispatchQueue.main.async {
                     if success {
-                        print("success")
+//                        print("success")
                         
                         self.getSearchAutoCompleteProducts()
                         

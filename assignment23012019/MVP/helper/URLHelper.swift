@@ -38,14 +38,14 @@ open class Utility {
             let returnURL = linkrecord["Href"] as? String,
             let method = linkrecord["Method"] as? String {                         // get the link
             //success, got the link, return with completion
-            print("got the link : \(returnURL)")
+//            print("got the link : \(returnURL)")
             completion(returnURL, method)
             
             
         } else {
             
             // we failed one of the checks. exit with fail
-            print("error no status code")
+//            print("error no status code")
             completion(nil, nil)
         }
         

@@ -50,23 +50,23 @@ class CustomSearchTextField: UITextField{
     }
     
     @objc open func textFieldDidChange(){
-        print("Text changed ...")
+//        print("Text changed ...")
         filter()
         updateSearchTableView()
         tableView?.isHidden = false
     }
     
     @objc open func textFieldDidBeginEditing() {
-        print("Begin Editing")
+//        print("Begin Editing")
     }
     
     @objc open func textFieldDidEndEditing() {
-        print("End editing")
+//        print("End editing")
 
     }
     
     @objc open func textFieldDidEndEditingOnExit() {
-        print("End on Exit")
+//        print("End on Exit")
     }
   
     

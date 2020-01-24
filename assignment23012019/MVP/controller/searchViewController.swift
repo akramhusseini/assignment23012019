@@ -89,6 +89,25 @@ extension searchViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if !presenter.isThereANextPageToLoad() {
+            return
+        }
+        let remainder = indexPath.row % 10
+        if remainder > 5 {
+            // this cell index is in the last 5 cells , lets check if its visible
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if tableView.visibleCells.contains(cell) {
+                    
+                    //  this is a visible cell, load another page
+                    self.presenter.loadAdditionalPage()
+                    
+                }
+            }
+        }
+        
+    }
+    
 }
 
 
@@ -98,6 +117,7 @@ extension searchViewController : UITableViewDelegate, UITableViewDataSource {
 extension searchViewController : searchView {
     
     func reloadProductTableView(hasData: Bool) {
+        
         tableView.reloadData()
         if hasData {
             tableView.isHidden = false
