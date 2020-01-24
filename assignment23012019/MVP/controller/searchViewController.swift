@@ -12,7 +12,7 @@ class searchViewController: UIViewController, UITextFieldDelegate {
 
     let presenter = searchPresenterView(searchService())
     
-    @IBOutlet weak var search: UITextField!
+    @IBOutlet weak var search: CustomSearchTextField!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchButton: UIButton!
     
@@ -25,11 +25,14 @@ class searchViewController: UIViewController, UITextFieldDelegate {
         tableView.delegate = self
         search.delegate = self
         search.addTarget(self, action: #selector(enterPressed), for: .editingDidEndOnExit)
+        tableView.isHidden = true
 //        if let imageWithColor = searchButton.imageView?.image?.imageWithColor(color1: UIColor.white) {
 //            searchButton.imageView?.image = imageWithColor
 //        }
         searchButton.imageView?.contentMode = .scaleAspectFit
         tableView.rowHeight = 150
+        
+        search.attachView(self)
      
     }
     
@@ -38,10 +41,15 @@ class searchViewController: UIViewController, UITextFieldDelegate {
         if !presenter.isViewAttached() {
             presenter.attachView(self)
         }
+        
+        if !search.isViewAttached() {
+            search.attachView(self)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         presenter.detachView()
+        search.detachView()
     }
     
     
@@ -58,7 +66,7 @@ class searchViewController: UIViewController, UITextFieldDelegate {
     
     func performSearch() {
         print("searching products")
-        
+        search.removeTable()
         if let searchTerm = search.text {
             presenter.SearchProducts(searchTerm: searchTerm)
         }
@@ -91,8 +99,14 @@ extension searchViewController : UITableViewDelegate, UITableViewDataSource {
 
 extension searchViewController : searchView {
     
-    func reloadProductTableView() {
+    func reloadProductTableView(hasData: Bool) {
         tableView.reloadData()
+        if hasData {
+            tableView.isHidden = false
+        } else {
+            tableView.isHidden = true
+        }
+        
     }
     
  
@@ -115,5 +129,14 @@ extension searchViewController : searchView {
        func removeLoader() {
            self.removeSpinner()
        }
+    
+}
+
+// MARK: - startSearch extension for the customSearchField, to call back when a selection is done and start searching
+extension searchViewController : startSearch {
+    func startSearching() {
+        performSearch()
+    }
+    
     
 }

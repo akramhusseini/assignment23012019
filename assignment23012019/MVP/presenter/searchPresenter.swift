@@ -21,7 +21,7 @@ import SwiftKeychainWrapper
 protocol searchView : UIViewController {
     func displayLoader()
     func removeLoader()
-    func reloadProductTableView()
+    func reloadProductTableView(hasData: Bool)
 }
 
 
@@ -56,13 +56,14 @@ class searchPresenterView  {
         service.searchProducts(searchTerm: searchTerm, token: token) { (products) in
             if let products = products {
                 self.products = products
-                self.view?.reloadProductTableView()
+                let hasData = self.products.count > 0
+                self.view?.reloadProductTableView(hasData: hasData)
                 
             } else {
                 print("no products found")
                 // clear db and reload
                 self.products.removeAll()
-                self.view?.reloadProductTableView()
+                self.view?.reloadProductTableView(hasData: false)
             }
 
             self.view?.removeLoader()

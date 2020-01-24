@@ -8,6 +8,8 @@
 
 import Foundation
 import Alamofire
+import RealmSwift
+import Realm
 
 
 class loginService {
@@ -35,7 +37,42 @@ class loginService {
         
     }
     
-    func getAutoComplete(token: String, completion: @escaping ([String]?) -> Void) {
+    
+    
+    func checkAutoCompleteIsFilled () -> Bool {
+        
+        
+        do {
+            let realm = try Realm()
+            let items = realm.objects(autoCompleteTable.self)
+            print(items.count)
+            if items.count > 0 {
+                return true
+            } else {
+                return false
+            }
+
+
+        } catch let error as NSError {
+            print(error.localizedDescription)
+            return true
+        }
+        
+        
+    }
+    
+    
+    func getAutoComplete(token: String, completion: @escaping (Bool) -> Void) {
+        
+        // first check if we have data in realm or not
+        
+        if checkAutoCompleteIsFilled() {
+            completion(true)
+            return
+        }
+        
+        
+        
         Utility.getURLAndMethod(Rel: SearchAutoCompleteProductsRel) { (url, method) in
                            if let url = url, let method = method,
                                let httpMethod = method.httpMethodFromString(){
@@ -48,16 +85,30 @@ class loginService {
                                 if let dict = response.result.value as? [String:Any],
                                     let ProductNameList = dict["ProductNameList"] as? [[String:Any]]{
                                     
-                                    var strings : [String] = []
+//                                    var strings : [String] = []
                                     for item in ProductNameList {
                                         if let name = item["Name"] as? String {
+                                            do {
+//                                            strings.append(name)
+                                            let realm = try Realm()
+                                                try realm.write {
+                                                    let newAutoCompleteItem = autoCompleteTable()
+                                                    newAutoCompleteItem.name = name
+                                                    
+                                                    realm.add(newAutoCompleteItem)
+                                                }
                                             
-                                            strings.append(name)
+                                            } catch let error as NSError {
+                                                print(error.localizedDescription)
+                                            }
                                         }
                                     }
-                                    completion(strings)
+                                    
+                                    completion(true)
                                     
 //                                   print(dict)
+                                } else {
+                                    completion(false)
                                 }
 //                                print(response.result.value!)
                                }

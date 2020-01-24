@@ -8,18 +8,18 @@
 
 import Foundation
 
-class autoCompleteNames {
-    var name: String = ""
-    
-    init(jsonData: [String:Any]) {
-        
-        
-        if let name = jsonData["Name"] as? String {
-            
-            self.name = name
-        }
-    }
-}
+//class autoCompleteNames {
+//    var name: String = ""
+//    
+//    init(jsonData: [String:Any]) {
+//        
+//        
+//        if let name = jsonData["Name"] as? String {
+//            
+//            self.name = name
+//        }
+//    }
+//}
 
 
 

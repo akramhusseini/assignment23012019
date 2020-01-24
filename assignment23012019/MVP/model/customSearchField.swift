@@ -7,22 +7,35 @@
 //
 
 import Foundation
-
+import Realm
+import RealmSwift
 
 import UIKit
 
+protocol startSearch {
+    func startSearching()
+}
+
 class CustomSearchTextField: UITextField{
     
-    var resultsList : [String] = [String()]
+   private var view : startSearch?
+    var resultsList : [autoCompleteTable] = []
     var tableView: UITableView?
     
     
     // Connecting the new element to the parent view
     open override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
-        tableView?.removeFromSuperview()
+        removeTable()
         
     }
+    
+    
+    func removeTable () {
+        tableView?.removeFromSuperview()
+        tableView = nil
+    }
+    
     
     override open func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
@@ -66,10 +79,26 @@ class CustomSearchTextField: UITextField{
     
     fileprivate func filter() {
        
+        do {
+            let realm = try Realm()
+            resultsList = realm.objects(autoCompleteTable.self).filter(where: {$0.name.lowercased().contains(text!.lowercased())}, limit: 4)
+            //                   print(items.count)
+            
+            
+            tableView?.reloadData()
+        } catch let error as NSError {
+            print(error.localizedDescription)
+            
+        }
         
-        resultsList = autoCompleteArray.filter(where: {$0.contains(text!)}, limit: 4)
-        tableView?.reloadData()
+        
+        
+        
     }
+//        resultsList = autoCompleteArray.filter(where: {$0.contains(text!)}, limit: 4)
+//        resultsList = .filter(where: {$0.contains(text!)}, limit: 4)
+        
+    
     
 
 }
@@ -150,17 +179,51 @@ extension CustomSearchTextField: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomSearchTextFieldCell", for: indexPath) as UITableViewCell
         cell.backgroundColor = UIColor.clear
-        cell.textLabel?.text = resultsList[indexPath.row]
+        cell.textLabel?.text = resultsList[indexPath.row].name
         return cell
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected row")
-        self.text = resultsList[indexPath.row]
+        self.text = resultsList[indexPath.row].name
         tableView.isHidden = true
         self.endEditing(true)
+        view?.startSearching()
     }
     
-
+    /**
+        check if View is not attached to controller
+        - Parameter none
+        - Returns: none
+        */
+       
+       func isViewAttached()->Bool {
+           if view == nil {
+               return false
+           } else {
+               return true
+           }
+       }
+       
+       
+       /**
+        attach this custom class to controller
+        - Parameter none
+        - Returns: none
+        */
+       func attachView(_ view: startSearch) {
+           self.view = view
+       }
+       
+       
+       /**
+        detach custom class from controller
+        - Parameter none
+        - Returns: none
+        */
+       func detachView() {
+           self.view = nil
+       }
+       
     
 }

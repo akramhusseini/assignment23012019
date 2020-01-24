@@ -76,14 +76,15 @@ class loginPresenterView  {
             return
         }
         //        view?.displayLoader()
-        service.getAutoComplete(token: token) { (names) in
+        service.getAutoComplete(token: token) { (completed) in
             DispatchQueue.main.async {
                 self.view?.removeLoader()
             }
+            print(completed)
             
-            if let names = names {
-                autoCompleteArray = names
-            }
+//            if let names = names {
+//                autoCompleteArray = names
+//            }
             //            print(result as Any)
             
             self.gotoSearch()

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import p2_OAuth2
+
 
 let MainUrl = "https://test-apis.speedyservices.com/"
 
